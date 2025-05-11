@@ -2,7 +2,7 @@
 
 {
     home.username = "ztcollazo";
-    home.homeDirectory = if nixpkgs.hostPlatform = "aarch64-darwin" then /Users/ztcollazo" else "/home/ztcollazo";
+    home.homeDirectory = if pkgs.hostPlatform == "aarch64-darwin" then "/Users/ztcollazo" else "/home/ztcollazo";
 
     programs.zsh = {
         enable = true;

@@ -1,5 +1,5 @@
 {
-    description = "Zachary's cross-platfor NixOS setup";
+    description = "Zachary's cross-platform NixOS setup";
 
     inputs = {
         nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -18,10 +18,6 @@
             # Set Git commit hash for darwin-version.
             system.configurationRevision = self.rev or self.dirtyRev or null;
 
-            # Used for backwards compatibility, please read the changelog before changing.
-            # $ darwin-rebuild changelog
-            system.stateVersion = 6;
-
             nixpkgs.config.allowUnfree = true;
         };
     in
@@ -31,13 +27,16 @@
         darwinConfigurations."Zacharys-MacBook-Air" = nix-darwin.lib.darwinSystem {
             modules = [
                 configuration
-                ./common.nix
+                ./modules/common.nix
                 ./hosts/Zacharys-MacBook-Air/configuration.nix
                 home-manager.darwinModules.home-manager
                 {
                     home-manager.useGlobalPkgs = true;
                     home-manager.useUserPackages = true;
-                    home-manager.users.ztcollazo = import ./home.nix;
+                    home-manager.users.ztcollazo = import ./home/common.nix;
+                }
+                {
+                    system.stateVersion = 6;
                 }
             ];
         };
@@ -45,13 +44,16 @@
         nixosConfigurations."zacharys-inspiron" = nixpkgs.lib.nixosSystem {
             modules = [
                 configuration
-                ./common.nix
+                ./modules/common.nix
                 ./hosts/zacharys-inspiron/configuration.nix
                 home-manager.nixosModules.home-manager
                 {
                     home-manager.useGlobalPkgs = true;
                     home-manager.useUserPackages = true;
-                    home-manager.users.ztcollazo = import ./home.nix;
+                    home-manager.users.ztcollazo = import ./home/common.nix;
+                }
+                {
+                    system.stateVersion = "25.05";
                 }
             ];
         };

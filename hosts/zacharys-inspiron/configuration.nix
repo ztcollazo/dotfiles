@@ -1,4 +1,6 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+
+{
   imports = [
     ./hardware-configuration.nix
   ];
@@ -10,12 +12,8 @@
 
   console = {
     font = "Lat2-Terminus16";
-    usXkbConfig = true;
+    useXkbConfig = true;
   };
-
-  services.xserver.enable = true;
-  services.xserver.xkb.layout = "us";
-  services.xserver.xkb.options = "eurosign;e,caps:escape";
 
   services.pipewire = {
     enable = true;
@@ -24,12 +22,10 @@
 
   users.users.ztcollazo = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "networkmanager" "video" ];
   };
-
-  nixpkgs.config.allowUnfree = true;
 
   hardware.firmware = with pkgs; [ linux-firmware ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ broadcom_sta ];
-  boot.blacklistedKernelModules = [ "b43" "ssb" "bcma" "brcmsmac" "brcmfmac" ]
-};
+  boot.blacklistedKernelModules = [ "b43" "ssb" "bcma" "brcmsmac" "brcmfmac" ];
+}
