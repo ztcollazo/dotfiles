@@ -14,7 +14,6 @@
         podman
         libpq
         libssh
-        obsidian
         starship
         gnupg
         helix
@@ -29,7 +28,7 @@
         nix-direnv.enable = true;
     };
 
-    fonts.packages = with pkgs; [ fontconfig jetbrains-mono ];
+    fonts.packages = with pkgs; [ fontconfig jetbrains-mono nerd-fonts.jetbrains-mono ];
 
     users.users."ztcollazo".shell = pkgs.zsh;
 

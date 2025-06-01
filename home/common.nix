@@ -2,7 +2,13 @@
 
 {
     home.username = "ztcollazo";
-    home.homeDirectory = if pkgs.hostPlatform == "aarch64-darwin" then "/Users/ztcollazo" else "/home/ztcollazo";
+    home.homeDirectory = if pkgs.system == "aarch64-darwin" then "/Users/ztcollazo" else "/home/ztcollazo";
+
+    imports = [
+        ./modules/tmux.nix  
+    ];
+
+    home.sessionVariables.ZSH_TMUX_AUTOSTART = "true";
 
     programs.zsh = {
         enable = true;
@@ -20,7 +26,7 @@
 
         oh-my-zsh = {
             enable = true;
-            plugins = [ "git" ];
+            plugins = [ "git" "tmux" ];
         };
         history.size = 10000;
     };

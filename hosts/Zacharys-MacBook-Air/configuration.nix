@@ -6,6 +6,7 @@
         colima
         lima
         maccy
+        obsidian
     ];
 
     users.users."ztcollazo".home = "/Users/ztcollazo";
