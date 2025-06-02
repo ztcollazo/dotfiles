@@ -3,8 +3,8 @@
 
     inputs = {
         nixpkgs.url = "github:NixOS/nixpkgs/b3582c75c7f21ce0b429898980eddbbf05c68e55";
-        nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-        home-manager.url = "github:nix-community/home-manager";
+        nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+        home-manager.url = "github:nix-community/home-manager/release-25.05";
         catppuccin.url = "github:catppuccin/nix";
         hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
         nix-darwin.inputs.nixpkgs.follows = "nixpkgs";

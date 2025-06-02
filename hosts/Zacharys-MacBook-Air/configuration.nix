@@ -10,7 +10,7 @@
     ];
 
     users.users."ztcollazo".home = "/Users/ztcollazo";
-
+    system.primaryUser = "ztcollazo";
 
     system.defaults = {
         dock.autohide = true;
@@ -40,5 +40,15 @@
             "devcleaner"
             "gpg-suite-no-mail"
         ];
+
+        masApps = {
+            "Bluebook Exams" = 1645016851;
+            HextEdit = 1557247094;
+            Xcode = 497799835;
+            Numbers = 409203825;
+            Pages = 409201541;
+            Keynote = 409183694;
+            # Plash = 1494023538;
+        };
     };
 }
