@@ -3,7 +3,6 @@
 {
     environment.systemPackages = with pkgs; [
         git
-        neovim
         wget
         zsh
         curl
@@ -11,14 +10,9 @@
         meson
         fd
         ripgrep
-        podman
         libpq
         libssh
-        starship
         gnupg
-        helix
-        direnv
-        nix-direnv
     ];
 
     programs.zsh.enable = true;

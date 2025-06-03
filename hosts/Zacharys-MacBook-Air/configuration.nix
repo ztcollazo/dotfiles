@@ -7,6 +7,7 @@
         lima
         maccy
         obsidian
+        iterm2
     ];
 
     users.users."ztcollazo".home = "/Users/ztcollazo";
@@ -18,7 +19,7 @@
     };
 
     nixpkgs.hostPlatform = "aarch64-darwin";
-
+    system.stateVersion = 6;
 
     homebrew = {
         enable = true;
@@ -30,7 +31,6 @@
 
         casks = [
             "arc"
-            "iterm2"
             "dbngin"
             "protonvpn"
             "syncthing"

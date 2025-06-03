@@ -39,12 +39,15 @@
                     home-manager.useUserPackages = true;
                     home-manager.users.ztcollazo = {
                         imports = [
-                            ./home/common.nix
+                            catppuccin.homeModules.catppuccin
+                            ./home
                         ];
                     };
-                }
-                {
-                    system.stateVersion = 6;
+
+                    home-manager.extraSpecialArgs = {
+                        inherit inputs;
+                        host = "Zacharys-MacBook-Air";
+                    };
                 }
             ];
         };
@@ -61,10 +64,9 @@
                     home-manager.useUserPackages = true;
                     home-manager.users.ztcollazo = {
                         imports = [
-                            catppuccin.homeModules.default
+                            catppuccin.homeModules.catppuccin
                             hyprpanel.homeManagerModules.hyprpanel
-                            ./home/common.nix
-                            ./home/modules/hyprland.nix
+                            ./home
                         ];
                     };
 
@@ -72,10 +74,8 @@
 
                     home-manager.extraSpecialArgs = {
                         inherit inputs;
+                        host = "zacharys-inspiron";
                     };
-                }
-                {
-                    system.stateVersion = "25.05";
                 }
             ];
         };
