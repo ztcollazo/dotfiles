@@ -2,23 +2,85 @@
 
 {
   config = {
-    _module.args.packages.hyprland = with pkgs; [
+    _module.args.hyprlandPkgs = with pkgs; [
       xorg.xhost
       calcurse
-    ]);
+      w3m
+    ];
 
     catppuccin.enable = true;
     catppuccin.flavor = "mocha";
 
     programs.lf.enable = true;
-    programs.qutebrowser.enable = true;
     programs.mpv.enable = true;
     programs.imv.enable = true;
     programs.zathura.enable = true;
 
+    programs.qutebrowser = {
+      enable = true;
+      loadAutoconfig = true;
+      keyBindings = {
+        normal = {
+          "<ctrl-h>" = "tab-prev";
+          "<ctrl-l>" = "tab-next";
+          "gh" = "home";
+        };
+      };
+      aliases = {
+        "q" = "quit";
+        "w" = "session-save";
+        "wq" = "quit --save";
+        "x" = "quit --save";
+      };
+      settings = {
+        hints.uppercase = true;
+        hints.mode = "letter";
+        completion.height = "40%";
+        completion.shrink = true;
+        completion.use_best_match = true;
+        scrolling.smooth = true;
+        downloads.location.directory = "~/Downloads";
+        downloads.remove_finished = 30000;
+        fonts.default_family = "JetBrainsMono Nerd Font";
+        tabs.favicons.scale = 1.2;
+        tabs.padding = {
+          top = 5;
+          bottom = 5;
+          left = 5;
+          right = 5;
+        };
+      };
+      extraConfig = ''        
+        import os
+        from urllib.request import urlopen
+        
+        # load your autoconfig, use this, if the rest of your config is empty!
+        config.load_autoconfig()
+        
+        if not os.path.exists(config.configdir / "theme.py"):
+            theme = "https://raw.githubusercontent.com/catppuccin/qutebrowser/main/setup.py"
+            with urlopen(theme) as themehtml:
+                with open(config.configdir / "theme.py", "a") as file:
+                    file.writelines(themehtml.read().decode("utf-8"))
+        
+        if os.path.exists(config.configdir / "theme.py"):
+            import theme
+            theme.setup(c, 'mocha', True)
+      '';
+    };
+
     programs.aerc = {
       enable = true;
+      extraConfig = {
+        general.unsafe-accounts-conf = true;
+        filters = {
+          "text/plain" = "wrap -w 90 | colorize";
+          "text/html" = "w3m -I UTF-8 -T text/html -cols 90 | colorize";
+          "image/*" = "chafa";
+        };
+      };
     };
+    accounts.email.accounts.Personal.aerc.enable = true;
 
     services.hyprpolkitagent.enable = true;
 
@@ -26,22 +88,25 @@
       enable = true;
       overwrite.enable = true;
       systemd.enable = true;
+      config.enable = true;
       hyprland.enable = true;
       settings = {
-        theme.name = "catppuccin_mocha";
+        theme.name = "catppuccin_mocha_split";
         theme.font.name = "JetBrainsMono Nerd Font";
-        scalingPriority = "both";
+        scalingPriority = "hyprland";
         bar.launcher.autoDetectIcon = true;
+        theme.bar.transparent = true;
         theme.bar.scaling = 65;
         theme.osd.scaling = 65;
-        theme.notification.scaling = 70;
+        theme.notification.scaling = 65;
+        theme.bar.buttons.style = "split";
         theme.bar.menus.menu = {
           dashboard.scaling = 65;
           dashboard.confirmation_scaling = 65;
           media.scaling = 65;
           volume.scaling = 65;
-          network.scaling = 70;
-          bluetooth.scaling = 70;
+          network.scaling = 65;
+          bluetooth.scaling = 65;
           battery.scaling = 65;
           clock.scaling = 65;
         };
@@ -206,11 +271,6 @@
 
     gtk = {
       enable = true;
-    };
-
-    xdg.configFile."qutebrowser" = {
-      source = ./config/qutebrowser;
-      recursive = true;
     };
   };
 }

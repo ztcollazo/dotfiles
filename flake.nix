@@ -23,6 +23,8 @@
             system.configurationRevision = self.rev or self.dirtyRev or null;
 
             nixpkgs.config.allowUnfree = true;
+
+            nixpkgs.overlays = [ hyprpanel.overlay ];
         };
     in
     {
