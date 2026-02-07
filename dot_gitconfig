@@ -1,0 +1,36 @@
+[include]
+	path = ~/.config/delta/theme.gitconfig
+
+[user]
+	name = Zachary
+	email = ztcollazo08@gmail.com
+	signingkey = 3E484412695C0D9B
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[init]
+	defaultBranch = main
+[core]
+	excludesfile = /Users/ztcollazo/.gitignore
+	autocrlf = input
+	editor = hx
+	pager = delta
+[commit]
+	gpgsign = true
+[gpg]
+	program = /usr/local/bin/gpg
+[tag]
+	gpgsign = false
+[http]
+	postBuffer = 157286400
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+	features = catppuccin-mocha
+	line-numbers = true
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+[merge]
+    conflictStyle = zdiff3

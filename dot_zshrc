@@ -1,0 +1,29 @@
+autoload -Uz compinit
+compinit
+
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+  tmux attach-session -t default || tmux new-session -s default
+fi
+
+source "/opt/homebrew/opt/antidote/share/antidote/antidote.zsh"
+
+antidote load ${ZDOTDIR:-$HOME}/.zsh_plugins.txt
+
+eval "$(starship init zsh)"
+
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+
+source <(fzf --zsh)
+eval "$(zoxide init zsh)"
+
+export MANPAGER="bat -plman"
+export FZF_DEFAULT_OPTS='--tmux center,70% --layout reverse --border'
+
+
+alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
+alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+fpath=(~/.zsh/completions $fpath)
+
+source /Users/ztcollazo/.config/broot/launcher/bash/br
