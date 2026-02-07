@@ -3,7 +3,7 @@ LICENSE
 
 # Secrets
 .ssh/id_*
-.gnupg/
+.gnupg/private-keys-v1.d
 
 # Caches
 **/.cache/**

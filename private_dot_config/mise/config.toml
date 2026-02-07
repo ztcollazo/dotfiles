@@ -1,0 +1,10 @@
+[tools]
+bun = "latest"
+node = "latest"
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+
+[settings]
+
+[settings.npm]
+package_manager = "bun"
