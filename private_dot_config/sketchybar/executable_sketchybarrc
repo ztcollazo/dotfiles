@@ -1,0 +1,142 @@
+#!/bin/bash
+
+# =========================
+# HYPRLAND-STYLE RICE BAR
+# =========================
+# Catppuccin-ish palette
+BG=0x884e4e6e
+FG=0xffcdd6f4
+ACCENT=0xff89b4fa
+MUTED=0xff6c7086
+PILL=0x22ffffff
+ACTIVE=0xff89b4fa
+
+# ===== BAR =====
+sketchybar --bar \
+  margin=10 \
+  y_offset=5 \
+  corner_radius=5 \
+  position=top \
+  height=36 \
+  blur_radius=40 \
+  color=$BG \
+  padding_left=12 \
+  padding_right=12
+
+# ===== DEFAULT STYLE =====
+sketchybar --default \
+  icon.font="Hack Nerd Font:Bold:14.0" \
+  label.font="Hack Nerd Font:Medium:13.0" \
+  icon.color=$FG \
+  label.color=$FG \
+  background.color=$PILL \
+  background.corner_radius=5 \
+  background.height=24 \
+  icon.padding_left=5 \
+  icon.padding_right=5 \
+  label.padding_left=0 \
+  label.padding_right=5 \
+  padding_left=5 \
+  padding_right=5 \
+
+# =========================
+# WORKSPACES (AEROSPACE)
+# =========================
+# Icons instead of numbers
+ICONS=("" "" "" "")
+
+sketchybar --add event aerospace_workspace_change
+
+for i in ${!ICONS[@]}; do
+  sid=$((i+1))
+  sketchybar --add item space.$sid left \
+    --subscribe space.$sid aerospace_workspace_change \
+    --set space.$sid \
+      icon="${ICONS[$i]}" \
+      background.drawing=off \
+      label.drawing=off \
+      click_script="aerospace workspace $sid" \
+      script="$CONFIG_DIR/plugins/aerospace.sh $sid"
+done
+
+# --- Workspace highlight script ---
+mkdir -p ~/.config/sketchybar/plugins
+cat > ~/.config/sketchybar/plugins/aerospace.sh << 'EOF'
+#!/bin/bash
+if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
+    sketchybar --set $NAME background.drawing=on
+else
+    sketchybar --set $NAME background.drawing=off
+fi
+EOF
+chmod +x ~/.config/sketchybar/plugins/aerospace.sh
+
+# =========================
+# CENTER: FRONT APP (CLEAN)
+# =========================
+cat > ~/.config/sketchybar/plugins/front_app.sh << 'EOF'
+#!/bin/bash
+APP=$(aerospace list-windows --focused --json | jq -r '.[0]."app-name"'
+)
+sketchybar --set $NAME label="$APP"
+EOF
+chmod +x ~/.config/sketchybar/plugins/front_app.sh
+
+sketchybar --add event aerospace_focus_change
+sketchybar --add item front_app center \
+           --subscribe front_app aerospace_focus_change \
+           --set front_app label.font="Hack Nerd Font:Bold:14.0" \
+           --set front_app script="$HOME/.config/sketchybar/plugins/front_app.sh" \
+           --set front_app background.color=0x00000000
+
+# =========================
+# RIGHT SIDE MODULES
+# =========================
+
+# --- CLOCK ---
+sketchybar --add item clock right \
+           --set clock update_freq=1 \
+           --set clock icon='' \
+           --set clock script='sketchybar --set clock label=$(date "+%H:%M")'
+
+# --- BATTERY ---
+cat > ~/.config/sketchybar/plugins/battery.sh << 'EOF'
+#!/bin/bash
+PCT=$(pmset -g batt | rg '\d+%' | cut -d% -f1 | choose 2)
+ICON=""
+[ "$PCT" -lt 80 ] && ICON=""
+[ "$PCT" -lt 60 ] && ICON=""
+[ "$PCT" -lt 40 ] && ICON=""
+[ "$PCT" -lt 20 ] && ICON=""
+sketchybar --set $NAME label="$PCT%" icon="$ICON"
+EOF
+chmod +x ~/.config/sketchybar/plugins/battery.sh
+
+sketchybar --add item battery right \
+           --set battery script="$HOME/.config/sketchybar/plugins/battery.sh" \
+           --set battery update_freq=20
+
+# --- WIFI ---
+cat > ~/.config/sketchybar/plugins/wifi.sh << 'EOF'
+#!/bin/bash
+SSID=$(ipconfig getsummary en0 | rg " SSID" | choose 2:)
+[ -z "$SSID" ] && SSID="Offline"
+sketchybar --set $NAME label="$SSID" icon=""
+EOF
+chmod +x ~/.config/sketchybar/plugins/wifi.sh
+
+sketchybar --add item wifi right \
+           --set wifi script="$HOME/.config/sketchybar/plugins/wifi.sh" \
+           --set wifi update_freq=20
+
+# =========================
+# ANIMATIONS (THE SECRET SAUCE)
+# =========================
+sketchybar --animate tanh 10
+
+# =========================
+# FINALIZE
+# =========================
+sketchybar --update
+sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
+

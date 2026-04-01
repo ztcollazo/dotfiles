@@ -1,6 +1,7 @@
 abbr cat bat
 alias ca 'bat --style=plain'
 
+alias zi 'tv zoxide'
 abbr cd z
 abbr cdi zi
 

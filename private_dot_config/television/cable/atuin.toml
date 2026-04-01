@@ -1,0 +1,15 @@
+[metadata]
+name = "atuin"
+description = "Fuzzy search your synced and local atuin history."
+requirements = ["atuin"]
+
+[source]
+command = "atuin history list --cmd-only | awk '!x[$0]++' | tail -r"
+no_sort = true
+
+[ui]
+layout = "portrait"
+input_bar_position = "bottom"
+
+[ui.preview_panel]
+hidden = true

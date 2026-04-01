@@ -1,6 +1,7 @@
 alias cat = bat
 alias ca = bat --style=plain
 
+alias zi = tv zoxide
 alias cd = z
 alias cdi = zi
 
